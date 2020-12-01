@@ -9,10 +9,14 @@ package org.nlogo.swing;
 import javax.swing.Icon;
 import java.awt.Component;
 import java.awt.FontMetrics;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.font.TextAttribute;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * VTextIcon is an Icon implementation which draws a short string vertically.
@@ -154,7 +158,10 @@ public strictfp class VTextIcon implements Icon, PropertyChangeListener {
   public void paintIcon(Component c, Graphics g, int x, int y) {
     // We don't insist that it be on the same Component
     g.setColor(c.getForeground());
-    g.setFont(c.getFont());
+    Font f = c.getFont();
+    Map<TextAttribute, Object> textAttributes = new HashMap<TextAttribute, Object>();
+    textAttributes.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+    g.setFont(f.deriveFont(textAttributes));
     if (fRotation == ROTATE_NONE) {
       int yPos = y + fCharHeight;
       for (int i = 0; i < fCharStrings.length; i++) {
